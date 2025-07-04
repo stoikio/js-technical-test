@@ -1,15 +1,27 @@
 {
   "setupTasks": [
     {
-      "name": "Install Dependencies",
+      "name": "Install Root Dependencies",
+      "command": "npm install"
+    },
+    {
+      "name": "Install All Dependencies",
       "command": "npm run install:all"
     }
   ],
   "tasks": {
+    "start": {
+      "name": "Setup and Start Development",
+      "command": "npm start",
+      "runAtStart": true,
+      "preview": {
+        "port": 3000
+      }
+    },
     "dev": {
       "name": "Start Development Servers",
       "command": "npm run dev",
-      "runAtStart": true,
+      "runAtStart": false,
       "preview": {
         "port": 3000
       }

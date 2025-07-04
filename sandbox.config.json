@@ -23,10 +23,15 @@
     }
   },
   "tasks": {
+    "start": {
+      "name": "Setup and Start Development",
+      "command": "npm start",
+      "runAtStart": true
+    },
     "dev": {
       "name": "Start Development Servers",
       "command": "npm run dev",
-      "runAtStart": true
+      "runAtStart": false
     },
     "setup": {
       "name": "Setup Database",

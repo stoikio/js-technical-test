@@ -5,8 +5,8 @@ This project is configured to work smoothly in CodeSandbox for code interviews a
 ## ⚡ Quick Start
 
 1. **Fork this sandbox** to your own account
-2. **Install dependencies**: The project will automatically run `npm run setup:codesandbox` on first load
-3. **Start development**: Run `npm run dev` to start both frontend and API servers
+2. **Setup and start**: The project will automatically run `npm start` which installs dependencies and starts both servers
+3. **Ready to code**: Both frontend and API will be running and ready for development
 
 ## 🌐 Available Services
 
@@ -46,10 +46,13 @@ Then restart the servers: `npm run dev`
 ## 🔧 Development Commands
 
 ```bash
-# Start both servers
+# Setup and start everything (recommended)
+npm start
+
+# Start both servers (after dependencies are installed)
 npm run dev
 
-# Install dependencies
+# Install dependencies only
 npm run install:all
 
 # Build for production

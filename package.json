@@ -4,9 +4,11 @@
   "description": "URL Shortener service with React + Express + PostgreSQL",
   "private": true,
   "scripts": {
+    "install:root": "npm install",
     "install:api": "cd api && npm install",
     "install:frontend": "cd frontend && npm install",
-    "install:all": "npm run install:api && npm run install:frontend",
+    "install:all": "npm run install:root && npm run install:api && npm run install:frontend",
+    "start": "npm run install:all && npm run dev",
     "dev": "concurrently \"npm run dev:api\" \"npm run dev:frontend\" --names \"API,Frontend\" --prefix-colors \"blue,green\"",
     "dev:api": "cd api && npm run dev",
     "dev:frontend": "cd frontend && npm run dev",
