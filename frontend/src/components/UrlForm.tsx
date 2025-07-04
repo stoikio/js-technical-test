@@ -3,7 +3,34 @@ import type { ShortenResponse } from "../types";
 import ErrorMessage from "./ErrorMessage";
 import SuccessResult from "./SuccessResult";
 
-const API_BASE_URL = "http://localhost:3001";
+// Dynamic API URL that works in different environments
+const getApiUrl = () => {
+  // In StackBlitz, use relative URLs or the same origin
+  if (typeof window !== "undefined") {
+    // Check if we're in StackBlitz or similar environment
+    if (
+      window.location.hostname.includes("stackblitz") ||
+      window.location.hostname.includes("webcontainer") ||
+      window.location.hostname.includes("github.dev") ||
+      window.location.hostname.includes("gitpod")
+    ) {
+      return "/api";
+    }
+
+    // For local development, use the explicit API server
+    if (
+      window.location.hostname === "localhost" ||
+      window.location.hostname === "127.0.0.1"
+    ) {
+      return "http://localhost:3001/api";
+    }
+  }
+
+  // Default fallback
+  return "/api";
+};
+
+const API_BASE_URL = getApiUrl();
 
 export default function UrlForm() {
   const [url, setUrl] = useState<string>("");
@@ -24,7 +51,7 @@ export default function UrlForm() {
     setLoading(true);
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/shorten`, {
+      const response = await fetch(`${API_BASE_URL}/shorten`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

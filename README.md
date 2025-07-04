@@ -1,6 +1,6 @@
 # URL Shortener - TypeScript Boilerplate
 
-A complete URL shortener application built with TypeScript, featuring a React frontend, Express API, and in-memory database. Perfect as a boilerplate for full-stack TypeScript projects.
+A complete URL shortener application built with TypeScript, featuring a React frontend, Express API, and PGlite database. Perfect as a boilerplate for full-stack TypeScript projects.
 
 ## 🚀 Quick Start
 
@@ -29,13 +29,24 @@ npm start
 - 🌐 Frontend: http://localhost:3000
 - 🔌 API: http://localhost:3001
 
+#### StackBlitz & Online IDEs
+
+This project works seamlessly in StackBlitz and other online IDEs! The code automatically detects the environment and:
+
+- ✅ **Real PostgreSQL syntax** via PGlite WASM
+- ✅ **Dynamic API URLs** that work in any environment
+- ✅ **Proper CORS configuration** for online IDE previews
+- ✅ **Health check endpoint** at `/api/health` for debugging
+
+Just import the project and run `npm install && npm run dev` - everything works out of the box!
+
 ## 🏗️ Architecture
 
 ### Tech Stack
 
 - **Frontend**: React 18 + TypeScript + Vite + Tailwind CSS
 - **Backend**: Express + TypeScript + Node.js
-- **Database**: SQLite (in-memory for dev, file-based for production)
+- **Database**: PGlite (PostgreSQL in WASM)
 - **Build**: Vite + TypeScript compiler
 - **Styling**: Tailwind CSS 4.x
 
@@ -115,7 +126,7 @@ Returns a 301 redirect to the original URL.
 - **⚡ Fast Performance**: Optimized with Vite and modern tools
 - **🎯 Type Safety**: Full TypeScript coverage
 - **🔄 Auto-redirect**: 301 redirects to original URLs
-- **💾 SQLite Database**: Lightweight, zero-setup database with full SQL support
+- **💾 PGlite Database**: Real PostgreSQL in WASM, works everywhere
 - **🏃‍♂️ Zero Setup**: No database installation required
 
 ## 🚀 Deployment Ready

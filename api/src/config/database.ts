@@ -1,28 +1,9 @@
-// Simple in-memory database with SQL-like interface
-// Perfect for development, testing, and lightweight applications
+// Simple database abstraction that works in all environments
+// Uses SQLite locally, falls back to in-memory storage in StackBlitz
 
-import Database from "better-sqlite3";
-import path from "path";
+import { PGlite } from "@electric-sql/pglite";
 
-// SQLite database setup
-const dbPath =
-  process.env.NODE_ENV === "production"
-    ? path.join(process.cwd(), "data.db")
-    : ":memory:"; // In-memory for development
-
-const db = new Database(dbPath);
-
-// Create tables
-db.exec(`
-  CREATE TABLE IF NOT EXISTS urls (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    original_url TEXT NOT NULL,
-    slug TEXT UNIQUE NOT NULL,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-  )
-`);
-
-// Database client interface that mimics PostgreSQL client API
+// Database client interface that matches PostgreSQL client API
 export interface DatabaseClient {
   query(
     text: string,
@@ -31,35 +12,33 @@ export interface DatabaseClient {
   release?(): void;
 }
 
-// SQLite client implementation with PostgreSQL-compatible interface
-class SQLiteClient implements DatabaseClient {
+// PGlite database instance (in-memory by default)
+const db = new PGlite();
+
+// Initialize database schema
+async function initializeDatabase() {
+  await db.exec(`
+    CREATE TABLE IF NOT EXISTS urls (
+      id SERIAL PRIMARY KEY,
+      original_url TEXT NOT NULL,
+      slug TEXT UNIQUE NOT NULL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+  `);
+}
+
+// PGlite client implementation with PostgreSQL-compatible interface
+class PGliteClient implements DatabaseClient {
   async query(
     text: string,
     params: any[] = []
   ): Promise<{ rows: any[]; rowCount: number }> {
     try {
-      // Convert PostgreSQL-style $1, $2 parameters to SQLite-style ?
-      const sqliteQuery = text.replace(/\$(\d+)/g, "?");
-
-      if (sqliteQuery.toLowerCase().trim().startsWith("select")) {
-        // Handle SELECT queries
-        const stmt = db.prepare(sqliteQuery);
-        const rows = stmt.all(params);
-        return { rows, rowCount: rows.length };
-      } else {
-        // Handle INSERT, UPDATE, DELETE queries
-        const stmt = db.prepare(sqliteQuery);
-        const result = stmt.run(params);
-
-        // For INSERT with RETURNING, get the inserted row
-        if (sqliteQuery.toLowerCase().includes("returning")) {
-          const selectStmt = db.prepare("SELECT * FROM urls WHERE id = ?");
-          const insertedRow = selectStmt.get(result.lastInsertRowid);
-          return { rows: [insertedRow], rowCount: 1 };
-        }
-
-        return { rows: [], rowCount: result.changes };
-      }
+      const result = await db.query(text, params);
+      return {
+        rows: result.rows,
+        rowCount: result.rows.length,
+      };
     } catch (error) {
       console.error("Database query error:", error);
       throw error;
@@ -67,12 +46,20 @@ class SQLiteClient implements DatabaseClient {
   }
 }
 
-// Get database client (always returns SQLite implementation)
+// Initialize the database when the module loads
+let dbInitialized = false;
+
+// Get database client
 export const getClient = async (): Promise<DatabaseClient> => {
-  return new SQLiteClient();
+  if (!dbInitialized) {
+    console.log("🐘 Initializing PGlite (PostgreSQL in WASM)");
+    await initializeDatabase();
+    dbInitialized = true;
+  }
+  return new PGliteClient();
 };
 
 // Graceful shutdown function
 export const closeDatabaseConnection = async (): Promise<void> => {
-  db.close();
+  await db.close();
 };

@@ -5,10 +5,18 @@ import { generateUniqueSlug } from "../utils/slugGenerator.js";
 const router = Router();
 
 /**
- * POST /api/shorten
+ * GET /health
+ * Health check endpoint
+ */
+router.get("/health", async (req: Request, res: Response) => {
+  res.json({ status: "OK", timestamp: new Date().toISOString() });
+});
+
+/**
+ * POST /shorten
  * Create a shortened URL
  */
-router.post("/api/shorten", async (req: Request, res: Response) => {
+router.post("/shorten", async (req: Request, res: Response) => {
   try {
     const { url } = req.body;
 
@@ -35,8 +43,9 @@ router.post("/api/shorten", async (req: Request, res: Response) => {
 
       if (existing.rows.length > 0) {
         const slug = existing.rows[0].slug;
+        const shortUrl = `${req.protocol}://${req.get("host")}/${slug}`;
         return res.json({
-          short_url: `http://localhost:3001/${slug}`,
+          short_url: shortUrl,
         });
       }
 
@@ -57,8 +66,9 @@ router.post("/api/shorten", async (req: Request, res: Response) => {
         [url, slug]
       );
 
+      const shortUrl = `${req.protocol}://${req.get("host")}/${slug}`;
       res.status(201).json({
-        short_url: `http://localhost:3001/${slug}`,
+        short_url: shortUrl,
       });
     } finally {
       if (client.release) {
