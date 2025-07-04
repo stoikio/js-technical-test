@@ -21,12 +21,36 @@ console.log("BASE_URL:", process.env.BASE_URL);
 // Middleware
 app.use(
   cors({
-    origin:
-      process.env.FRONTEND_URL ||
-      // In CodeSandbox, allow all csb.app and codesandbox.io domains
-      (process.env.NODE_ENV === "development"
-        ? ["http://localhost:3000", /\.csb\.app$/, /\.codesandbox\.io$/]
-        : "http://localhost:3000"),
+    origin: function (origin, callback) {
+      // Allow requests with no origin (like mobile apps or curl requests)
+      if (!origin) return callback(null, true);
+
+      // Define allowed origins
+      const allowedOrigins = [
+        "http://localhost:3000",
+        "https://localhost:3000",
+      ];
+
+      // In development, allow CodeSandbox domains
+      if (process.env.NODE_ENV === "development") {
+        if (
+          origin.includes(".csb.app") ||
+          origin.includes(".codesandbox.io") ||
+          origin.includes("localhost")
+        ) {
+          return callback(null, true);
+        }
+      }
+
+      // Check if origin is in allowed list
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      // Log the rejected origin for debugging
+      console.log("CORS blocked origin:", origin);
+      return callback(new Error("Not allowed by CORS"));
+    },
     credentials: true,
   })
 );
