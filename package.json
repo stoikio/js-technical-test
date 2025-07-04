@@ -1,0 +1,45 @@
+{
+  "name": "url-shortener",
+  "version": "1.0.0",
+  "description": "URL Shortener service with React + Express + PostgreSQL",
+  "private": true,
+  "scripts": {
+    "install:api": "cd api && npm install",
+    "install:frontend": "cd frontend && npm install",
+    "install:all": "npm run install:api && npm run install:frontend",
+    "dev:api": "cd api && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "build:api": "cd api && npm run build",
+    "build:frontend": "cd frontend && npm run build",
+    "start:api": "cd api && npm start",
+    "start:frontend": "cd frontend && npm run preview",
+    "db:up": "docker-compose up -d",
+    "db:down": "docker-compose down",
+    "db:logs": "docker-compose logs -f postgres",
+    "db:reset": "docker-compose down -v && docker-compose up -d",
+    "setup": "npm run install:all && npm run db:up",
+    "clean": "cd api && npm run clean && cd ../frontend && rm -rf dist",
+    "format": "prettier --write \"**/*.{js,ts,tsx,json,md}\"",
+    "lint": "echo 'Run linting in api/ and frontend/ directories'"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.1.11",
+    "concurrently": "^8.2.2",
+    "prettier": "^3.1.1"
+  },
+  "workspaces": [
+    "api",
+    "frontend"
+  ],
+  "keywords": [
+    "typescript",
+    "react",
+    "express",
+    "postgresql",
+    "docker",
+    "vite",
+    "tailwind"
+  ],
+  "author": "",
+  "license": "MIT"
+}
