@@ -3,7 +3,18 @@ import type { ShortenResponse } from "../types";
 import ErrorMessage from "./ErrorMessage";
 import SuccessResult from "./SuccessResult";
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3001";
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL ||
+  // In CodeSandbox, construct the API URL using the current domain
+  (window.location.hostname.includes("csb.app") ||
+  window.location.hostname.includes("codesandbox.io")
+    ? `${window.location.protocol}//${window.location.hostname.replace("-3000", "-3001")}`
+    : "http://localhost:3001");
+
+// Debug logging for CodeSandbox
+console.log("API_BASE_URL:", API_BASE_URL);
+console.log("Current hostname:", window.location.hostname);
+console.log("Environment VITE_API_URL:", import.meta.env.VITE_API_URL);
 
 export default function UrlForm() {
   const [url, setUrl] = useState<string>("");

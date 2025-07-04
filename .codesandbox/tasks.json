@@ -1,10 +1,13 @@
 {
+  // These tasks will run in order when initializing your CodeSandbox project.
   "setupTasks": [
     {
       "name": "Install Dependencies",
       "command": "npm install"
     }
   ],
+
+  // These tasks can be run from CodeSandbox. Running one will open a log in the app.
   "tasks": {
     "install:all": {
       "name": "Install All Dependencies",
@@ -19,17 +22,22 @@
     "dev:api": {
       "name": "Start API Server",
       "command": "npm run dev:api",
-      "runAtStart": true
+      "runAtStart": true,
+      "preview": {
+        "port": 3001
+      }
     },
     "dev:frontend": {
       "name": "Start Frontend Server",
       "command": "npm run dev:frontend",
-      "runAtStart": true
+      "runAtStart": true,
+      "preview": {
+        "port": 3000
+      }
     },
     "dev": {
       "name": "Start Full Stack",
-      "command": "npm run dev",
-      "runAtStart": false
+      "command": "npm run dev"
     }
   }
-} 
+}
