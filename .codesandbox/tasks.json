@@ -1,49 +1,31 @@
 {
   "setupTasks": [
     {
-      "name": "Install Root Dependencies",
-      "command": "npm install"
+      "name": "Install Dependencies",
+      "command": "npm run install:all"
     },
     {
-      "name": "Install API Dependencies",
-      "command": "npm run install:api"
+      "name": "Setup Database",
+      "command": "npm run db:up"
     },
     {
-      "name": "Install Frontend Dependencies",
-      "command": "npm run install:frontend"
+      "name": "Wait for Database",
+      "command": "sleep 5"
     }
   ],
   "tasks": {
-    "start": {
-      "name": "Setup and Start Development",
-      "command": "npm start",
+    "dev:api": {
+      "name": "Start API Server",
+      "command": "npm run dev:api",
       "runAtStart": true,
-      "preview": {
-        "port": 3000
-      }
-    },
-    "dev": {
-      "name": "Start Development Servers",
-      "command": "npm run dev",
-      "runAtStart": false,
-      "preview": {
-        "port": 3000
-      }
-    },
-    "build": {
-      "name": "Build All",
-      "command": "npm run build:safe"
-    },
-    "api": {
-      "name": "API Server Only",
-      "command": "cd api && npm run dev:safe",
       "preview": {
         "port": 3001
       }
     },
-    "frontend": {
-      "name": "Frontend Only",
-      "command": "cd frontend && npm run dev:safe",
+    "dev:frontend": {
+      "name": "Start Frontend",
+      "command": "npm run dev:frontend",
+      "runAtStart": true,
       "preview": {
         "port": 3000
       }

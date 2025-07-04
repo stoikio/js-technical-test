@@ -2,8 +2,7 @@ import { useState } from "react";
 import type { ShortenResponse } from "../types";
 import ErrorMessage from "./ErrorMessage";
 import SuccessResult from "./SuccessResult";
-
-const API_BASE_URL = "http://localhost:3001";
+import { API_BASE_URL } from "../config/api";
 
 export default function UrlForm() {
   const [url, setUrl] = useState<string>("");

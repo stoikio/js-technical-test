@@ -6,9 +6,7 @@
   "scripts": {
     "start": "node dist/index.js",
     "dev": "tsx watch src/index.ts",
-    "dev:safe": "npm install && tsx watch src/index.ts",
     "build": "tsc",
-    "build:safe": "npm install && tsc",
     "clean": "rm -rf dist"
   },
   "dependencies": {
