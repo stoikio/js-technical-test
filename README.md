@@ -74,6 +74,10 @@ npm run dev
 # Install all dependencies
 npm run install:all
 
+# Individual servers (with auto-install)
+cd frontend && npm run dev:safe  # Frontend only
+cd api && npm run dev:safe       # API only
+
 # Build for production
 npm run build:api && npm run build:frontend
 

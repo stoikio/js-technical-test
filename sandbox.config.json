@@ -6,7 +6,7 @@
   "container": {
     "port": 3000,
     "startScript": "dev",
-    "node": "18"
+    "node": "20"
   },
   "ports": {
     "3000": {

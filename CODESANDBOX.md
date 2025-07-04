@@ -5,8 +5,12 @@ This project is configured to work smoothly in CodeSandbox for code interviews a
 ## ⚡ Quick Start
 
 1. **Fork this sandbox** to your own account
-2. **Setup and start**: The project will automatically run `npm start` which installs dependencies and starts both servers
-3. **Ready to code**: Both frontend and API will be running and ready for development
+2. **Setup and start**: The project will automatically run `npm start` which:
+   - Cleans and installs all dependencies fresh
+   - Starts both frontend (port 3000) and API (port 3001) servers
+3. **Ready to code**: Both servers will be running and ready for development
+
+> ⚠️ **First run takes 2-3 minutes** as it installs all dependencies fresh
 
 ## 🌐 Available Services
 
@@ -46,8 +50,11 @@ Then restart the servers: `npm run dev`
 ## 🔧 Development Commands
 
 ```bash
-# Setup and start everything (recommended)
+# Setup and start everything (recommended - cleans dependencies)
 npm start
+
+# Quick start (if dependencies already installed)
+npm run start:quick
 
 # Start both servers (after dependencies are installed)
 npm run dev
@@ -55,7 +62,14 @@ npm run dev
 # Install dependencies only
 npm run install:all
 
-# Build for production
+# Safe individual server commands (auto-install dependencies)
+cd frontend && npm run dev:safe  # Frontend with auto-install
+cd api && npm run dev:safe       # API with auto-install
+
+# Build for production (safe - installs dependencies first)
+npm run build:safe
+
+# Build (after dependencies installed)
 npm run build:api && npm run build:frontend
 
 # Lint code
@@ -78,9 +92,12 @@ npm run format
 
 ### Dependency Issues
 
-1. Run `npm run install:all` to ensure all dependencies are installed
-2. If frontend fails to start, check that `@tailwindcss/vite` is installed in frontend
-3. Clear cache and restart: refresh the CodeSandbox environment
+1. **If setup fails with module errors**: Run `npm start` to clean install all dependencies
+2. **If frontend fails to start**: Use "Frontend Only" task which auto-installs dependencies
+3. **For concurrently/yargs errors**: Run `npm start` to fix root dependency issues
+4. **Manual installation**: Run `npm run install:all` to ensure all dependencies are installed
+5. **Direct frontend setup**: In frontend folder, run `npm run dev:safe` (installs + starts)
+6. **Clear cache**: Refresh the CodeSandbox environment if issues persist
 
 ### Database Connection Issues
 

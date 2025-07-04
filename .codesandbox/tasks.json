@@ -5,8 +5,12 @@
       "command": "npm install"
     },
     {
-      "name": "Install All Dependencies",
-      "command": "npm run install:all"
+      "name": "Install API Dependencies",
+      "command": "npm run install:api"
+    },
+    {
+      "name": "Install Frontend Dependencies",
+      "command": "npm run install:frontend"
     }
   ],
   "tasks": {
@@ -28,18 +32,18 @@
     },
     "build": {
       "name": "Build All",
-      "command": "npm run build:api && npm run build:frontend"
+      "command": "npm run build:safe"
     },
     "api": {
       "name": "API Server Only",
-      "command": "npm run dev:api",
+      "command": "cd api && npm run dev:safe",
       "preview": {
         "port": 3001
       }
     },
     "frontend": {
       "name": "Frontend Only",
-      "command": "npm run dev:frontend",
+      "command": "cd frontend && npm run dev:safe",
       "preview": {
         "port": 3000
       }
