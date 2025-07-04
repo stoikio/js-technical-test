@@ -135,7 +135,4 @@ temp/
 .prettiercache
 
 # StyleLint cache
-.stylelintcache
-
-# CodeSandbox
-.codesandbox/workspace.json 
+.stylelintcache 

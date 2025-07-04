@@ -1,7 +1,9 @@
 {
   "template": "node",
-  "startScript": "dev:frontend",
   "container": {
+    "node": "18",
+    "startScript": "install:all",
     "port": 3000
-  }
+  },
+  "infiniteLoopProtection": false
 } 

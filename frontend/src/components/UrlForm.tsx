@@ -2,7 +2,8 @@ import { useState } from "react";
 import type { ShortenResponse } from "../types";
 import ErrorMessage from "./ErrorMessage";
 import SuccessResult from "./SuccessResult";
-import { API_BASE_URL } from "../config/api";
+
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3001";
 
 export default function UrlForm() {
   const [url, setUrl] = useState<string>("");

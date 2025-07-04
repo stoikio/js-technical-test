@@ -36,7 +36,7 @@ router.post("/api/shorten", async (req: Request, res: Response) => {
       if (existing.rows.length > 0) {
         const slug = existing.rows[0].slug;
         return res.json({
-          short_url: `http://localhost:3001/${slug}`,
+          short_url: `${process.env.BASE_URL || "http://localhost:3001"}/${slug}`,
         });
       }
 
@@ -58,7 +58,7 @@ router.post("/api/shorten", async (req: Request, res: Response) => {
       );
 
       res.status(201).json({
-        short_url: `http://localhost:3001/${slug}`,
+        short_url: `${process.env.BASE_URL || "http://localhost:3001"}/${slug}`,
       });
     } finally {
       client.release();
