@@ -27,7 +27,6 @@
     "lint": "echo 'Run linting in api/ and frontend/ directories'"
   },
   "devDependencies": {
-    "@tailwindcss/vite": "^4.1.11",
     "concurrently": "^8.2.2",
     "prettier": "^3.1.1"
   },

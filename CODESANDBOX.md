@@ -76,6 +76,12 @@ npm run format
 
 ## 🐛 Troubleshooting
 
+### Dependency Issues
+
+1. Run `npm run install:all` to ensure all dependencies are installed
+2. If frontend fails to start, check that `@tailwindcss/vite` is installed in frontend
+3. Clear cache and restart: refresh the CodeSandbox environment
+
 ### Database Connection Issues
 
 1. Check your `DATABASE_URL` in `api/.env`
