@@ -1,198 +1,180 @@
-# 🔗 URL Shortener - TypeScript Boilerplate
+# 🔗 URL Shortener - TypeScript Fullstack Boilerplate
 
-A full-stack TypeScript boilerplate for a URL shortener application with Express API, React frontend, and PostgreSQL database.
+A modern, production-ready URL shortener built with TypeScript, React, Express, and PostgreSQL. Perfect for technical interviews and quick prototyping.
 
-## 🚀 Quick Start with Gitpod
+## 🚀 Quick Start
 
-**One-click setup in the cloud:**
+### CodeSandbox (Recommended for Interviews)
 
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/your-username/your-repo)
+[![Open in CodeSandbox](https://img.shields.io/badge/Open%20in-CodeSandbox-blue?style=flat-square&logo=codesandbox)](https://codesandbox.io)
 
-The Gitpod workspace will automatically:
+1. **Import this repository** into CodeSandbox
+2. **Wait for setup** - dependencies will install automatically
+3. **Start coding** - everything is configured and ready!
 
-- ✅ Set up PostgreSQL database with schema
-- ✅ Install all dependencies (API + Frontend)
-- ✅ Start the API server on port 3001
-- ✅ Start the frontend server on port 3000
-- ✅ Open the application in your browser
+> 📋 **For CodeSandbox setup details, see [CODESANDBOX.md](./CODESANDBOX.md)**
 
-**Ready to code in ~2 minutes!**
+### Local Development
 
-## 🛠️ Technology Stack
+```bash
+# 1. Clone the repository
+git clone <repository-url>
+cd url-shortener
 
-- **Frontend**: React 18 + TypeScript + Vite + Tailwind CSS
-- **Backend**: Express.js + TypeScript + PostgreSQL
-- **Database**: PostgreSQL with connection pooling
-- **Development**: Hot reload, ESLint, Prettier
-- **Deployment**: Docker ready
+# 2. Install dependencies
+npm run install:all
 
-## 📋 Features
+# 3. Start database (requires Docker)
+npm run db:up
 
-- 🔗 **URL Shortening**: Convert long URLs to short, memorable links
-- 🎯 **Clean UI**: Modern, responsive design with Tailwind CSS
-- 🔄 **Real-time**: Instant URL generation and validation
-- 📊 **Database**: PostgreSQL with proper indexing
-- 🚀 **Fast**: Optimized for performance
-- 🔒 **Secure**: Input validation and sanitization
+# 4. Start development servers
+npm run dev
+```
 
-## 🏗️ Project Structure
+## 🏗️ Tech Stack
+
+- **Frontend**: React 19, TypeScript, Vite, Tailwind CSS
+- **Backend**: Express.js, TypeScript, Node.js
+- **Database**: PostgreSQL with Docker
+- **Dev Tools**: ESLint, Prettier, Concurrently
+
+## 📁 Project Structure
 
 ```
 ├── api/                 # Express API server
 │   ├── src/
-│   │   ├── config/     # Database configuration
-│   │   ├── routes/     # API routes
-│   │   ├── utils/      # Utility functions
-│   │   └── index.ts    # API entry point
+│   │   ├── config/      # Database configuration
+│   │   ├── routes/      # API routes
+│   │   ├── utils/       # Utility functions
+│   │   └── index.ts     # Main server file
 │   └── package.json
-├── frontend/           # React frontend
+├── frontend/            # React frontend
 │   ├── src/
-│   │   ├── components/ # React components
-│   │   ├── types/      # TypeScript types
-│   │   └── App.tsx     # Main application
+│   │   ├── components/  # React components
+│   │   ├── types/       # TypeScript types
+│   │   └── App.tsx      # Main App component
 │   └── package.json
-├── database/           # Database initialization
-│   └── init.sql        # Database schema
-├── docker-compose.yml  # PostgreSQL container
-└── .gitpod.yml         # Gitpod configuration
+├── database/            # PostgreSQL setup
+│   └── init.sql         # Database schema
+├── docker-compose.yml   # Docker configuration
+└── package.json         # Root package.json
 ```
 
-## 🔧 Local Development
+## 🌐 API Endpoints
 
-### Prerequisites
+- `POST /api/shorten` - Create a shortened URL
+- `GET /:slug` - Redirect to original URL (301 redirect)
 
-- Node.js 18+
-- PostgreSQL 14+
-- npm or yarn
-
-### Setup
-
-1. **Clone the repository**
-
-   ```bash
-   git clone <your-repo-url>
-   cd url-shortener
-   ```
-
-2. **Install dependencies**
-
-   ```bash
-   npm install
-   cd api && npm install
-   cd ../frontend && npm install
-   ```
-
-3. **Start PostgreSQL**
-
-   ```bash
-   docker-compose up -d
-   ```
-
-4. **Start development servers**
-
-   ```bash
-   # Terminal 1 - API
-   cd api && npm run dev
-
-   # Terminal 2 - Frontend
-   cd frontend && npm run dev
-   ```
-
-5. **Open the application**
-   - Frontend: http://localhost:3000
-   - API: http://localhost:3001
-
-## 📡 API Endpoints
-
-### `POST /api/shorten`
-
-Create a shortened URL
-
-**Request:**
-
-```json
-{
-  "url": "https://example.com/very-long-url"
-}
-```
-
-**Response:**
-
-```json
-{
-  "original_url": "https://example.com/very-long-url",
-  "short_url": "http://localhost:3001/aY2Pv8",
-  "slug": "aY2Pv8"
-}
-```
-
-### `GET /:slug`
-
-Redirect to original URL
-
-**Example:** `GET /aY2Pv8` → 301 redirect to original URL
-
-## 🗄️ Database Schema
-
-```sql
-CREATE TABLE urls (
-  id SERIAL PRIMARY KEY,
-  original_url TEXT NOT NULL,
-  slug VARCHAR(10) UNIQUE NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-```
-
-## 🎯 Development Scripts
+## 🔧 Development Commands
 
 ```bash
-# Root level
-npm run dev          # Start both API and frontend
-npm run build        # Build both projects
-npm run clean        # Clean all node_modules
+# Start both frontend and API
+npm run dev
 
-# API (api/)
-npm run dev          # Start API with hot reload
-npm run build        # Build API
-npm start            # Start built API
+# Install all dependencies
+npm run install:all
 
-# Frontend (frontend/)
-npm run dev          # Start frontend with hot reload
-npm run build        # Build frontend
-npm run preview      # Preview built frontend
+# Build for production
+npm run build:api && npm run build:frontend
+
+# Database management
+npm run db:up          # Start PostgreSQL
+npm run db:down        # Stop PostgreSQL
+npm run db:reset       # Reset database
+npm run db:logs        # View database logs
+
+# Code quality
+npm run format         # Format code with Prettier
+npm run lint          # Run linting
 ```
 
-## 🔧 Environment Variables
+## 🎯 Features
 
-Create `.env` files in the API directory:
+- **URL Shortening**: Create short URLs like `http://localhost:3001/aB3xY7`
+- **Automatic Redirects**: 301 redirects to original URLs
+- **Duplicate Detection**: Reuses existing short URLs for same original URL
+- **Modern UI**: Clean, responsive interface with Tailwind CSS
+- **TypeScript**: Full type safety across frontend and backend
+- **Component Architecture**: Modular, reusable React components
+- **PostgreSQL Integration**: Robust database layer with proper connection pooling
+
+## 🧪 Using in CodeSandbox
+
+The project is fully configured for CodeSandbox environments:
+
+- **Database Setup**: Connect to external PostgreSQL service
+- **Auto-start**: Both servers start automatically
+- **Live Preview**: Frontend opens immediately
+
+## 📝 Environment Variables
+
+### API (`api/.env`)
 
 ```env
-DATABASE_URL=postgresql://url_user:url_password@localhost:5432/url_shortener
+DATABASE_URL=postgresql://user:password@localhost:5432/url_shortener
 PORT=3001
 NODE_ENV=development
+FRONTEND_URL=http://localhost:3000
 ```
+
+### Database Config
+
+```env
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=stoik_test
+DB_USER=postgres
+DB_PASSWORD=password
+```
+
+## 🔒 Security Features
+
+- **CORS Configuration**: Proper cross-origin resource sharing
+- **Input Validation**: URL format validation
+- **Error Handling**: Graceful error responses
+- **Environment Variables**: Secure configuration management
+
+## 🎨 UI/UX Features
+
+- **Responsive Design**: Works on all screen sizes
+- **Loading States**: Visual feedback during operations
+- **Error Messages**: Clear error communication
+- **Copy to Clipboard**: One-click URL copying
+- **Modern Styling**: Clean, professional interface
 
 ## 📦 Deployment
 
-The project is Docker-ready and can be deployed to:
+### Production Build
 
-- Heroku
-- Vercel (Frontend) + Railway (API)
-- AWS/Google Cloud
-- Any VPS with Docker
+```bash
+npm run build:api
+npm run build:frontend
+```
+
+### Docker Deployment
+
+```bash
+docker-compose up -d
+```
 
 ## 🤝 Contributing
 
 1. Fork the repository
 2. Create a feature branch
 3. Make your changes
-4. Test thoroughly
+4. Run tests and linting
 5. Submit a pull request
 
 ## 📄 License
 
-MIT License - feel free to use this boilerplate for your projects!
+MIT License - see [LICENSE](LICENSE) for details.
+
+## 🆘 Support
+
+- **Issues**: Create a GitHub issue
+- **CodeSandbox**: Check [CODESANDBOX.md](./CODESANDBOX.md)
+- **Documentation**: This README covers all features
 
 ---
 
-**Happy coding! 🚀**
+**Perfect for**: Technical interviews, coding challenges, learning fullstack development, prototyping URL shorteners.

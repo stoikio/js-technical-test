@@ -1,0 +1,36 @@
+{
+  "setupTasks": [
+    {
+      "name": "Install Dependencies",
+      "command": "npm run install:all"
+    }
+  ],
+  "tasks": {
+    "dev": {
+      "name": "Start Development Servers",
+      "command": "npm run dev",
+      "runAtStart": true,
+      "preview": {
+        "port": 3000
+      }
+    },
+    "build": {
+      "name": "Build All",
+      "command": "npm run build:api && npm run build:frontend"
+    },
+    "api": {
+      "name": "API Server Only",
+      "command": "npm run dev:api",
+      "preview": {
+        "port": 3001
+      }
+    },
+    "frontend": {
+      "name": "Frontend Only",
+      "command": "npm run dev:frontend",
+      "preview": {
+        "port": 3000
+      }
+    }
+  }
+} 

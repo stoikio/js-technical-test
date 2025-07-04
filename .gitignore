@@ -22,9 +22,6 @@ out/
 .env.test.local
 .env.production.local
 
-# Allow .env.example files
-!**/.env.example
-
 # Logs
 logs
 *.log

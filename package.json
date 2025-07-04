@@ -7,6 +7,7 @@
     "install:api": "cd api && npm install",
     "install:frontend": "cd frontend && npm install",
     "install:all": "npm run install:api && npm run install:frontend",
+    "dev": "concurrently \"npm run dev:api\" \"npm run dev:frontend\" --names \"API,Frontend\" --prefix-colors \"blue,green\"",
     "dev:api": "cd api && npm run dev",
     "dev:frontend": "cd frontend && npm run dev",
     "build:api": "cd api && npm run build",
@@ -18,6 +19,7 @@
     "db:logs": "docker-compose logs -f postgres",
     "db:reset": "docker-compose down -v && docker-compose up -d",
     "setup": "npm run install:all && npm run db:up",
+    "setup:codesandbox": "npm run install:all",
     "clean": "cd api && npm run clean && cd ../frontend && rm -rf dist",
     "format": "prettier --write \"**/*.{js,ts,tsx,json,md}\"",
     "lint": "echo 'Run linting in api/ and frontend/ directories'"

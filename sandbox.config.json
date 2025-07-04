@@ -1,0 +1,36 @@
+{
+  "infiniteLoopProtection": true,
+  "hardReloadOnChange": false,
+  "view": "split",
+  "template": "node",
+  "container": {
+    "port": 3000,
+    "startScript": "dev",
+    "node": "18"
+  },
+  "ports": {
+    "3000": {
+      "main": true,
+      "protocol": "http"
+    },
+    "3001": {
+      "main": false,
+      "protocol": "http"
+    },
+    "5432": {
+      "main": false,
+      "protocol": "tcp"
+    }
+  },
+  "tasks": {
+    "dev": {
+      "name": "Start Development Servers",
+      "command": "npm run dev",
+      "runAtStart": true
+    },
+    "setup": {
+      "name": "Setup Database",
+      "command": "npm run setup"
+    }
+  }
+} 
