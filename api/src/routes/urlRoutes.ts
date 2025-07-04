@@ -1,5 +1,5 @@
 import { Router, Request, Response } from "express";
-import { pool } from "../config/database.js";
+import { getClient } from "../config/database.js";
 import { generateUniqueSlug } from "../utils/slugGenerator.js";
 
 const router = Router();
@@ -24,7 +24,7 @@ router.post("/api/shorten", async (req: Request, res: Response) => {
       return res.status(400).json({ error: "Invalid URL format" });
     }
 
-    const client = await pool.connect();
+    const client = await getClient();
 
     try {
       // Check if URL already exists
@@ -61,7 +61,9 @@ router.post("/api/shorten", async (req: Request, res: Response) => {
         short_url: `http://localhost:3001/${slug}`,
       });
     } finally {
-      client.release();
+      if (client.release) {
+        client.release();
+      }
     }
   } catch (error) {
     console.error("Error:", error);
@@ -76,7 +78,7 @@ router.post("/api/shorten", async (req: Request, res: Response) => {
 router.get("/:slug", async (req: Request, res: Response) => {
   try {
     const { slug } = req.params;
-    const client = await pool.connect();
+    const client = await getClient();
 
     try {
       // Get original URL
@@ -92,7 +94,9 @@ router.get("/:slug", async (req: Request, res: Response) => {
       // Redirect
       res.redirect(301, result.rows[0].original_url);
     } finally {
-      client.release();
+      if (client.release) {
+        client.release();
+      }
     }
   } catch (error) {
     console.error("Error:", error);

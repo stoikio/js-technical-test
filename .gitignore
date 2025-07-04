@@ -116,6 +116,8 @@ Thumbs.db
 *.db
 *.sqlite
 *.sqlite3
+data.db
+data.db
 
 # Docker
 .dockerignore
