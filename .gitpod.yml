@@ -1,0 +1,100 @@
+image: gitpod/workspace-postgres
+
+# List the start up tasks. Learn more: https://www.gitpod.io/docs/config-start-tasks/
+tasks:
+  - name: Setup Database
+    init: |
+      # Start PostgreSQL service
+      sudo service postgresql start
+      
+      # Create database and user
+      sudo -u postgres psql -c "CREATE DATABASE url_shortener;"
+      sudo -u postgres psql -c "CREATE USER url_user WITH PASSWORD 'url_password';"
+      sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE url_shortener TO url_user;"
+      
+      # Initialize database schema
+      sudo -u postgres psql -d url_shortener -c "
+        CREATE TABLE urls (
+          id SERIAL PRIMARY KEY,
+          original_url TEXT NOT NULL,
+          slug VARCHAR(10) UNIQUE NOT NULL,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );
+      "
+      
+      echo "✅ Database setup complete"
+    command: |
+      # Keep PostgreSQL running
+      sudo service postgresql start
+      
+  - name: Install Dependencies
+    init: |
+      # Install root dependencies
+      npm install
+      
+      # Install API dependencies
+      cd api && npm install
+      
+      # Install frontend dependencies  
+      cd ../frontend && npm install
+      
+      echo "✅ All dependencies installed"
+    command: |
+      echo "Dependencies ready"
+      
+  - name: Start API Server
+    init: |
+      # Wait for database to be ready
+      sleep 10
+    command: |
+      cd api
+      echo "🚀 Starting API server on port 3001..."
+      npm run dev
+      
+  - name: Start Frontend Server
+    init: |
+      # Wait for API to be ready
+      sleep 15
+    command: |
+      cd frontend
+      echo "🚀 Starting frontend server on port 3000..."
+      npm run dev -- --host 0.0.0.0
+
+# List the ports to expose. Learn more: https://www.gitpod.io/docs/config-ports/
+ports:
+  - name: Frontend
+    port: 3000
+    onOpen: open-browser
+    visibility: public
+    description: React frontend application
+  - name: API
+    port: 3001
+    onOpen: notify
+    visibility: public
+    description: Express API server
+  - name: PostgreSQL
+    port: 5432
+    onOpen: ignore
+    visibility: private
+    description: PostgreSQL database
+
+# List the VSCode extensions to install. Learn more: https://www.gitpod.io/docs/ides-and-editors/vscode-extensions/
+vscode:
+  extensions:
+    - bradlc.vscode-tailwindcss
+    - esbenp.prettier-vscode
+    - dbaeumer.vscode-eslint
+    - ms-vscode.vscode-typescript-next
+    - formulahendry.auto-rename-tag
+    - christian-kohler.path-intellisense
+    - ms-vscode.vscode-json
+    - redhat.vscode-yaml
+    - ms-python.python
+    - mtxr.sqltools
+    - mtxr.sqltools-driver-pg
+
+# Environment variables
+env:
+  DATABASE_URL: postgresql://url_user:url_password@localhost:5432/url_shortener
+  PORT: "3001"
+  NODE_ENV: development 

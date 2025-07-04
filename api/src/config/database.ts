@@ -1,65 +1,30 @@
-// Simple database abstraction that works in all environments
-// Uses SQLite locally, falls back to in-memory storage in StackBlitz
+import { Pool } from "pg";
+import dotenv from "dotenv";
 
-import { PGlite } from "@electric-sql/pglite";
+// Load environment variables
+dotenv.config();
 
-// Database client interface that matches PostgreSQL client API
-export interface DatabaseClient {
-  query(
-    text: string,
-    params?: any[]
-  ): Promise<{ rows: any[]; rowCount: number }>;
-  release?(): void;
-}
-
-// PGlite database instance (in-memory by default)
-const db = new PGlite();
-
-// Initialize database schema
-async function initializeDatabase() {
-  await db.exec(`
-    CREATE TABLE IF NOT EXISTS urls (
-      id SERIAL PRIMARY KEY,
-      original_url TEXT NOT NULL,
-      slug TEXT UNIQUE NOT NULL,
-      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    );
-  `);
-}
-
-// PGlite client implementation with PostgreSQL-compatible interface
-class PGliteClient implements DatabaseClient {
-  async query(
-    text: string,
-    params: any[] = []
-  ): Promise<{ rows: any[]; rowCount: number }> {
-    try {
-      const result = await db.query(text, params);
-      return {
-        rows: result.rows,
-        rowCount: result.rows.length,
-      };
-    } catch (error) {
-      console.error("Database query error:", error);
-      throw error;
+// Database configuration
+const dbConfig = process.env.DATABASE_URL
+  ? {
+      connectionString: process.env.DATABASE_URL,
+      ssl:
+        process.env.NODE_ENV === "production"
+          ? { rejectUnauthorized: false }
+          : false,
     }
-  }
-}
+  : {
+      user: process.env.DB_USER || "postgres",
+      host: process.env.DB_HOST || "localhost",
+      database: process.env.DB_NAME || "stoik_test",
+      password: process.env.DB_PASSWORD || "password",
+      port: parseInt(process.env.DB_PORT || "5432"),
+    };
 
-// Initialize the database when the module loads
-let dbInitialized = false;
-
-// Get database client
-export const getClient = async (): Promise<DatabaseClient> => {
-  if (!dbInitialized) {
-    console.log("🐘 Initializing PGlite (PostgreSQL in WASM)");
-    await initializeDatabase();
-    dbInitialized = true;
-  }
-  return new PGliteClient();
-};
+// Create and export database pool
+export const pool = new Pool(dbConfig);
 
 // Graceful shutdown function
 export const closeDatabaseConnection = async (): Promise<void> => {
-  await db.close();
+  await pool.end();
 };

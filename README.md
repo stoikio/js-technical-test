@@ -1,100 +1,116 @@
-# URL Shortener - TypeScript Boilerplate
+# 🔗 URL Shortener - TypeScript Boilerplate
 
-A complete URL shortener application built with TypeScript, featuring a React frontend, Express API, and PGlite database. Perfect as a boilerplate for full-stack TypeScript projects.
+A full-stack TypeScript boilerplate for a URL shortener application with Express API, React frontend, and PostgreSQL database.
 
-## 🚀 Quick Start
+## 🚀 Quick Start with Gitpod
 
-**Ready to run in any environment - no database setup required!**
+**One-click setup in the cloud:**
 
-#### Prerequisites
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/your-username/your-repo)
 
-- Node.js 18+ and npm
+The Gitpod workspace will automatically:
 
-#### Setup & Start
+- ✅ Set up PostgreSQL database with schema
+- ✅ Install all dependencies (API + Frontend)
+- ✅ Start the API server on port 3001
+- ✅ Start the frontend server on port 3000
+- ✅ Open the application in your browser
 
-```bash
-# Clone the repository
-git clone <repository-url>
-cd js-technical-test
+**Ready to code in ~2 minutes!**
 
-# Install dependencies
-npm run setup
-
-# Start development servers (API + Frontend)
-npm start
-```
-
-**Servers will be running at:**
-
-- 🌐 Frontend: http://localhost:3000
-- 🔌 API: http://localhost:3001
-
-#### StackBlitz & Online IDEs
-
-This project works seamlessly in StackBlitz and other online IDEs! The code automatically detects the environment and:
-
-- ✅ **Real PostgreSQL syntax** via PGlite WASM
-- ✅ **Dynamic API URLs** that work in any environment
-- ✅ **Proper CORS configuration** for online IDE previews
-- ✅ **Health check endpoint** at `/api/health` for debugging
-
-Just import the project and run `npm install && npm run dev` - everything works out of the box!
-
-## 🏗️ Architecture
-
-### Tech Stack
+## 🛠️ Technology Stack
 
 - **Frontend**: React 18 + TypeScript + Vite + Tailwind CSS
-- **Backend**: Express + TypeScript + Node.js
-- **Database**: PGlite (PostgreSQL in WASM)
-- **Build**: Vite + TypeScript compiler
-- **Styling**: Tailwind CSS 4.x
+- **Backend**: Express.js + TypeScript + PostgreSQL
+- **Database**: PostgreSQL with connection pooling
+- **Development**: Hot reload, ESLint, Prettier
+- **Deployment**: Docker ready
 
-### Project Structure
+## 📋 Features
+
+- 🔗 **URL Shortening**: Convert long URLs to short, memorable links
+- 🎯 **Clean UI**: Modern, responsive design with Tailwind CSS
+- 🔄 **Real-time**: Instant URL generation and validation
+- 📊 **Database**: PostgreSQL with proper indexing
+- 🚀 **Fast**: Optimized for performance
+- 🔒 **Secure**: Input validation and sanitization
+
+## 🏗️ Project Structure
 
 ```
-├── api/                   # Express API server
+├── api/                 # Express API server
 │   ├── src/
-│   │   ├── routes/        # API route handlers
-│   │   ├── config/        # Database configuration
-│   │   └── utils/         # Utility functions
+│   │   ├── config/     # Database configuration
+│   │   ├── routes/     # API routes
+│   │   ├── utils/      # Utility functions
+│   │   └── index.ts    # API entry point
 │   └── package.json
-├── frontend/              # React application
+├── frontend/           # React frontend
 │   ├── src/
-│   │   ├── components/    # React components
-│   │   └── types/         # TypeScript types
+│   │   ├── components/ # React components
+│   │   ├── types/      # TypeScript types
+│   │   └── App.tsx     # Main application
 │   └── package.json
-└── package.json           # Root package management
+├── database/           # Database initialization
+│   └── init.sql        # Database schema
+├── docker-compose.yml  # PostgreSQL container
+└── .gitpod.yml         # Gitpod configuration
 ```
 
-## 🛠️ Available Scripts
+## 🔧 Local Development
 
-### Root Level Commands
+### Prerequisites
 
-```bash
-npm start           # Start both API and frontend in development mode
-npm run dev         # Same as start
-npm run build       # Build both API and frontend for production
-npm run setup       # Install dependencies
-```
+- Node.js 18+
+- PostgreSQL 14+
+- npm or yarn
 
-### Individual Services
+### Setup
 
-```bash
-npm run dev:api        # Start API only (port 3001)
-npm run dev:frontend   # Start frontend only (port 3000)
-npm run build:api      # Build API for production
-npm run build:frontend # Build frontend for production
-```
+1. **Clone the repository**
 
-## 🌐 API Endpoints
+   ```bash
+   git clone <your-repo-url>
+   cd url-shortener
+   ```
 
-### Create Short URL
+2. **Install dependencies**
 
-```http
-POST /api/shorten
-Content-Type: application/json
+   ```bash
+   npm install
+   cd api && npm install
+   cd ../frontend && npm install
+   ```
 
+3. **Start PostgreSQL**
+
+   ```bash
+   docker-compose up -d
+   ```
+
+4. **Start development servers**
+
+   ```bash
+   # Terminal 1 - API
+   cd api && npm run dev
+
+   # Terminal 2 - Frontend
+   cd frontend && npm run dev
+   ```
+
+5. **Open the application**
+   - Frontend: http://localhost:3000
+   - API: http://localhost:3001
+
+## 📡 API Endpoints
+
+### `POST /api/shorten`
+
+Create a shortened URL
+
+**Request:**
+
+```json
 {
   "url": "https://example.com/very-long-url"
 }
@@ -106,40 +122,77 @@ Content-Type: application/json
 {
   "original_url": "https://example.com/very-long-url",
   "short_url": "http://localhost:3001/aY2Pv8",
-  "slug": "aY2Pv8",
-  "created_at": "2024-01-01T12:00:00.000Z"
+  "slug": "aY2Pv8"
 }
 ```
 
-### Redirect Short URL
+### `GET /:slug`
 
-```http
-GET /:slug
+Redirect to original URL
+
+**Example:** `GET /aY2Pv8` → 301 redirect to original URL
+
+## 🗄️ Database Schema
+
+```sql
+CREATE TABLE urls (
+  id SERIAL PRIMARY KEY,
+  original_url TEXT NOT NULL,
+  slug VARCHAR(10) UNIQUE NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 ```
 
-Returns a 301 redirect to the original URL.
+## 🎯 Development Scripts
 
-## 🎨 Features
+```bash
+# Root level
+npm run dev          # Start both API and frontend
+npm run build        # Build both projects
+npm run clean        # Clean all node_modules
 
-- **🔗 URL Shortening**: Create short, memorable links
-- **📱 Responsive Design**: Works on all devices
-- **⚡ Fast Performance**: Optimized with Vite and modern tools
-- **🎯 Type Safety**: Full TypeScript coverage
-- **🔄 Auto-redirect**: 301 redirects to original URLs
-- **💾 PGlite Database**: Real PostgreSQL in WASM, works everywhere
-- **🏃‍♂️ Zero Setup**: No database installation required
+# API (api/)
+npm run dev          # Start API with hot reload
+npm run build        # Build API
+npm start            # Start built API
 
-## 🚀 Deployment Ready
+# Frontend (frontend/)
+npm run dev          # Start frontend with hot reload
+npm run build        # Build frontend
+npm run preview      # Preview built frontend
+```
 
-This boilerplate is ready for deployment to various platforms:
+## 🔧 Environment Variables
 
-- **Frontend**: Vercel, Netlify, GitHub Pages
-- **API**: Railway, Render, Digital Ocean, Heroku
+Create `.env` files in the API directory:
 
-## 📝 License
+```env
+DATABASE_URL=postgresql://url_user:url_password@localhost:5432/url_shortener
+PORT=3001
+NODE_ENV=development
+```
+
+## 📦 Deployment
+
+The project is Docker-ready and can be deployed to:
+
+- Heroku
+- Vercel (Frontend) + Railway (API)
+- AWS/Google Cloud
+- Any VPS with Docker
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
+
+## 📄 License
 
 MIT License - feel free to use this boilerplate for your projects!
 
 ---
 
-**Perfect for**: Learning full-stack TypeScript, building MVPs, hackathons, or as a starting point for larger applications.
+**Happy coding! 🚀**

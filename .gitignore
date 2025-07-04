@@ -22,6 +22,9 @@ out/
 .env.test.local
 .env.production.local
 
+# Allow .env.example files
+!**/.env.example
+
 # Logs
 logs
 *.log
@@ -116,8 +119,6 @@ Thumbs.db
 *.db
 *.sqlite
 *.sqlite3
-data.db
-data.db
 
 # Docker
 .dockerignore

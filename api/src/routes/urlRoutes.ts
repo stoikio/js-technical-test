@@ -1,22 +1,14 @@
 import { Router, Request, Response } from "express";
-import { getClient } from "../config/database.js";
+import { pool } from "../config/database.js";
 import { generateUniqueSlug } from "../utils/slugGenerator.js";
 
 const router = Router();
 
 /**
- * GET /health
- * Health check endpoint
- */
-router.get("/health", async (req: Request, res: Response) => {
-  res.json({ status: "OK", timestamp: new Date().toISOString() });
-});
-
-/**
- * POST /shorten
+ * POST /api/shorten
  * Create a shortened URL
  */
-router.post("/shorten", async (req: Request, res: Response) => {
+router.post("/api/shorten", async (req: Request, res: Response) => {
   try {
     const { url } = req.body;
 
@@ -32,7 +24,7 @@ router.post("/shorten", async (req: Request, res: Response) => {
       return res.status(400).json({ error: "Invalid URL format" });
     }
 
-    const client = await getClient();
+    const client = await pool.connect();
 
     try {
       // Check if URL already exists
@@ -43,9 +35,8 @@ router.post("/shorten", async (req: Request, res: Response) => {
 
       if (existing.rows.length > 0) {
         const slug = existing.rows[0].slug;
-        const shortUrl = `${req.protocol}://${req.get("host")}/${slug}`;
         return res.json({
-          short_url: shortUrl,
+          short_url: `http://localhost:3001/${slug}`,
         });
       }
 
@@ -66,14 +57,11 @@ router.post("/shorten", async (req: Request, res: Response) => {
         [url, slug]
       );
 
-      const shortUrl = `${req.protocol}://${req.get("host")}/${slug}`;
       res.status(201).json({
-        short_url: shortUrl,
+        short_url: `http://localhost:3001/${slug}`,
       });
     } finally {
-      if (client.release) {
-        client.release();
-      }
+      client.release();
     }
   } catch (error) {
     console.error("Error:", error);
@@ -88,7 +76,7 @@ router.post("/shorten", async (req: Request, res: Response) => {
 router.get("/:slug", async (req: Request, res: Response) => {
   try {
     const { slug } = req.params;
-    const client = await getClient();
+    const client = await pool.connect();
 
     try {
       // Get original URL
@@ -104,9 +92,7 @@ router.get("/:slug", async (req: Request, res: Response) => {
       // Redirect
       res.redirect(301, result.rows[0].original_url);
     } finally {
-      if (client.release) {
-        client.release();
-      }
+      client.release();
     }
   } catch (error) {
     console.error("Error:", error);

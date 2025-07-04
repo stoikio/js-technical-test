@@ -15,7 +15,7 @@ const PORT = process.env.PORT || 3001;
 // Middleware
 app.use(
   cors({
-    origin: true, // Allow all origins for StackBlitz compatibility
+    origin: process.env.FRONTEND_URL || "http://localhost:3000",
     credentials: true,
   })
 );
@@ -23,8 +23,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Mount routes
-app.use("/api", urlRoutes);
-app.use("/", urlRoutes); // Also mount at root for redirect functionality
+app.use("/", urlRoutes);
 
 // Catch-all for undefined routes
 app.use("*", (req, res) => {
