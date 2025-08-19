@@ -1,4 +1,5 @@
 import { FC, useState } from "react";
+import { useToast } from "../hooks/toastContext";
 import type { ShortenResponse } from "../types";
 
 interface UrlResultProps {
@@ -8,12 +9,14 @@ interface UrlResultProps {
 
 export const UrlResult: FC<UrlResultProps> = ({ result, onCreateAnother }) => {
   const [copied, setCopied] = useState(false);
+  const { showToast } = useToast();
 
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(result.shortUrl);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
+      showToast("Short URL copied to clipboard");
     } catch (err) {
       console.error("Failed to copy:", err);
     }

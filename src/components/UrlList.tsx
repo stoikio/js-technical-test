@@ -1,10 +1,13 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import { useUrls } from "../hooks/urlsContext";
 import { useApiHealth } from "../hooks/useApiHealth";
+import { useToast } from "../hooks/toastContext";
 
 export const UrlList: FC = () => {
   const { urls, isLoading, error, refresh } = useUrls();
   const { apiBaseUrl } = useApiHealth();
+  const [copiedId, setCopiedId] = useState<number | null>(null);
+  const { showToast } = useToast();
 
   const copyToClipboard = async (url: string) => {
     try {
@@ -22,7 +25,13 @@ export const UrlList: FC = () => {
   };
 
   const getShortUrl = (shortCode: string) => {
-    return `${apiBaseUrl}/${shortCode}`;
+    // Prefer server-provided base; otherwise derive from frontend origin
+    if (apiBaseUrl) return `${apiBaseUrl}/${shortCode}`;
+    const origin = window.location.origin;
+    if (origin.includes("--3000--")) {
+      return `${origin.replace("--3000--", "--3001--")}/${shortCode}`;
+    }
+    return `${origin.replace(":3000", ":3001")}/${shortCode}`;
   };
 
   if (isLoading) {
@@ -71,7 +80,13 @@ export const UrlList: FC = () => {
                 </div>
                 <div className="flex gap-2">
                   <button
-                    onClick={() => copyToClipboard(getShortUrl(url.short_code))}
+                    type="button"
+                    onClick={async () => {
+                      await copyToClipboard(getShortUrl(url.short_code));
+                      showToast("Short URL copied to clipboard");
+                      setCopiedId(url.id);
+                      setTimeout(() => setCopiedId(null), 1200);
+                    }}
                     className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
                     title="Copy short URL"
                   >
