@@ -8,7 +8,11 @@ export const useApiHealth = () => {
 
   const checkApiHealth = async (): Promise<boolean> => {
     try {
-      const response = await fetch("/api/health");
+      const response = await fetch(
+        `/api/health?frontendOrigin=${encodeURIComponent(
+          window.location.origin
+        )}`
+      );
       if (response.ok) {
         const data: HealthCheckResponse = await response.json();
         if (data.status === "ok") {

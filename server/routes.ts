@@ -11,10 +11,14 @@ const router = Router();
 
 // GET /api/health - Health check endpoint
 router.get("/api/health", (req, res) => {
+  const frontendOrigin =
+    typeof req.query.frontendOrigin === "string"
+      ? (req.query.frontendOrigin as string)
+      : undefined;
   res.json({
     status: "ok",
     timestamp: new Date().toISOString(),
-    baseUrl: getBaseUrl(req),
+    baseUrl: getBaseUrl(req, frontendOrigin),
   });
 });
 
