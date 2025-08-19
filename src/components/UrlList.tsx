@@ -75,7 +75,7 @@ export const UrlList: FC = () => {
                     className="text-sm text-gray-900 truncate"
                     title={url.full_url}
                   >
-                    {url.full_url} ({url.click_count} clicks)
+                    {url.full_url}
                   </div>
                 </div>
                 <div className="flex gap-2">
