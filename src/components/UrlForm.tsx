@@ -1,5 +1,6 @@
 import { FC, useState } from "react";
 import type { ShortenResponse } from "../types";
+import { useUrls } from "../hooks/urlsContext";
 
 interface UrlFormProps {
   onUrlShortened: (result: ShortenResponse) => void;
@@ -9,6 +10,7 @@ export const UrlForm: FC<UrlFormProps> = ({ onUrlShortened }) => {
   const [url, setUrl] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const { refresh } = useUrls();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,6 +42,8 @@ export const UrlForm: FC<UrlFormProps> = ({ onUrlShortened }) => {
       }
 
       onUrlShortened(data);
+      // Trigger list refresh through context
+      refresh();
       setUrl(""); // Clear form on success
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred");

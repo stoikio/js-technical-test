@@ -10,7 +10,8 @@ export async function initializeDatabase() {
       id SERIAL PRIMARY KEY,
       short_code VARCHAR(12) UNIQUE NOT NULL,
       full_url TEXT NOT NULL,
-      created_at TIMESTAMP DEFAULT NOW()
+      created_at TIMESTAMP DEFAULT NOW(),
+      click_count INTEGER NOT NULL DEFAULT 0
     );
   `);
 
@@ -21,11 +22,11 @@ export async function initializeDatabase() {
 
   if (count == 0) {
     await db.exec(`
-      INSERT INTO urls (short_code, full_url, created_at) VALUES
-      ('F98KKD', 'https://stoik.com/', NOW() - INTERVAL '2 hours'),
-      ('Q0S9D8', 'https://linkedin.com/', NOW() - INTERVAL '1 hour'),
-      ('09FSD7', 'https://nodejs.org/en/docs/', NOW() - INTERVAL '30 minutes'),
-      ('QMLSD9', 'https://www.typescriptlang.org/docs/', NOW() - INTERVAL '15 minutes');
+      INSERT INTO urls (short_code, full_url, created_at, click_count) VALUES
+      ('F98KKD', 'https://stoik.com/', NOW() - INTERVAL '2 hours', 23),
+      ('Q0S9D8', 'https://linkedin.com/', NOW() - INTERVAL '1 hour', 0),
+      ('09FSD7', 'https://nodejs.org/en/docs/', NOW() - INTERVAL '30 minutes', 10),
+      ('QMLSD9', 'https://www.typescriptlang.org/docs/', NOW() - INTERVAL '15 minutes', 5);
     `);
     console.log("✅ Database initialized with example data");
   } else {

@@ -3,6 +3,7 @@ import type { HealthCheckResponse } from "../types";
 
 export const useApiHealth = () => {
   const [isApiReady, setIsApiReady] = useState(false);
+  const [apiBaseUrl, setApiBaseUrl] = useState<string | null>(null);
   const [healthCheckAttempts, setHealthCheckAttempts] = useState(0);
 
   const checkApiHealth = async (): Promise<boolean> => {
@@ -12,6 +13,9 @@ export const useApiHealth = () => {
         const data: HealthCheckResponse = await response.json();
         if (data.status === "ok") {
           setIsApiReady(true);
+          if ((data as any).baseUrl) {
+            setApiBaseUrl((data as any).baseUrl);
+          }
           return true;
         }
       }
@@ -46,6 +50,7 @@ export const useApiHealth = () => {
 
   return {
     isApiReady,
+    apiBaseUrl,
     healthCheckAttempts,
   };
 };

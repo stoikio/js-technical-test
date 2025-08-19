@@ -3,6 +3,7 @@ export interface UrlRow {
   short_code: string;
   full_url: string;
   created_at: string;
+  click_count: number;
 }
 
 export interface CountRow {

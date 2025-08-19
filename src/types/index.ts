@@ -19,6 +19,7 @@ export interface UrlItem {
   id: number;
   short_code: string;
   full_url: string;
+  click_count: number;
   created_at: string;
 }
 
@@ -30,4 +31,5 @@ export interface UrlListResponse {
 export interface HealthCheckResponse {
   status: string;
   timestamp: string;
+  baseUrl?: string;
 }

@@ -34,8 +34,18 @@ export async function getFullUrl(
  */
 export async function getAllUrls(limit: number = 10): Promise<UrlRow[]> {
   const result = await db.query(
-    "SELECT id, short_code, full_url, created_at FROM urls ORDER BY created_at DESC LIMIT $1",
+    "SELECT id, short_code, full_url, click_count, created_at FROM urls ORDER BY created_at DESC LIMIT $1",
     [limit]
   );
   return result.rows as UrlRow[];
+}
+
+/**
+ * Increment click counter for a short URL
+ */
+export async function incrementClickCount(shortCode: string): Promise<void> {
+  await db.query(
+    "UPDATE urls SET click_count = click_count + 1 WHERE short_code = $1",
+    [shortCode]
+  );
 }

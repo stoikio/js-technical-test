@@ -1,33 +1,10 @@
-import { useState, useEffect, FC } from "react";
-import type { UrlListResponse, UrlItem } from "../types";
+import { FC } from "react";
+import { useUrls } from "../hooks/urlsContext";
+import { useApiHealth } from "../hooks/useApiHealth";
 
 export const UrlList: FC = () => {
-  const [urls, setUrls] = useState<UrlItem[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState("");
-
-  const fetchUrls = async () => {
-    try {
-      setIsLoading(true);
-      const response = await fetch("/api/urls");
-      const data: UrlListResponse = await response.json();
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch URLs");
-      }
-
-      setUrls(data.urls);
-      setError("");
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchUrls();
-  }, []);
+  const { urls, isLoading, error, refresh } = useUrls();
+  const { apiBaseUrl } = useApiHealth();
 
   const copyToClipboard = async (url: string) => {
     try {
@@ -45,7 +22,7 @@ export const UrlList: FC = () => {
   };
 
   const getShortUrl = (shortCode: string) => {
-    return `${window.location.origin}/${shortCode}`;
+    return `${apiBaseUrl}/${shortCode}`;
   };
 
   if (isLoading) {
@@ -70,12 +47,6 @@ export const UrlList: FC = () => {
     <div className="w-full max-w-4xl mx-auto">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold text-gray-900">Recent URLs</h2>
-        <button
-          onClick={fetchUrls}
-          className="px-4 py-2 text-sm bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
-        >
-          Refresh
-        </button>
       </div>
 
       {urls.length === 0 ? (
@@ -95,7 +66,7 @@ export const UrlList: FC = () => {
                     className="text-sm text-gray-900 truncate"
                     title={url.full_url}
                   >
-                    {url.full_url}
+                    {url.full_url} ({url.click_count} clicks)
                   </div>
                 </div>
                 <div className="flex gap-2">
@@ -124,6 +95,12 @@ export const UrlList: FC = () => {
                     rel="noopener noreferrer"
                     className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
                     title="Visit URL"
+                    onClick={() => {
+                      // Give the server a brief moment to increment, then refresh the list
+                      setTimeout(() => {
+                        refresh();
+                      }, 300);
+                    }}
                   >
                     <svg
                       className="w-4 h-4"

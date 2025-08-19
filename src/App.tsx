@@ -5,10 +5,12 @@ import { UrlList } from "./components/UrlList";
 import { LoadingScreen } from "./components/LoadingScreen";
 import { useApiHealth } from "./hooks/useApiHealth";
 import type { ShortenResponse } from "./types";
+import { UrlsProvider } from "./hooks/urlsContext";
+import { CopyableInfo } from "./components/CopyableInfo";
 
 export default function App() {
   const [result, setResult] = useState<ShortenResponse | null>(null);
-  const { isApiReady } = useApiHealth();
+  const { isApiReady, apiBaseUrl } = useApiHealth();
 
   const handleUrlShortened = (shortenResult: ShortenResponse) => {
     setResult(shortenResult);
@@ -34,19 +36,29 @@ export default function App() {
           </p>
         </div>
 
-        <div className="flex justify-center">
-          {result ? (
-            <UrlResult result={result} onCreateAnother={handleCreateAnother} />
-          ) : (
-            <UrlForm onUrlShortened={handleUrlShortened} />
-          )}
-        </div>
+        <UrlsProvider>
+          <div className="flex justify-center">
+            {result ? (
+              <UrlResult
+                result={result}
+                onCreateAnother={handleCreateAnother}
+              />
+            ) : (
+              <UrlForm onUrlShortened={handleUrlShortened} />
+            )}
+          </div>
 
-        <div className="mt-16">
-          <UrlList />
-        </div>
+          <div className="mt-16">
+            <UrlList />
+          </div>
+        </UrlsProvider>
 
-        <div className="text-center mt-8 text-sm text-gray-500">
+        {apiBaseUrl && (
+          <div className="max-w-md mx-auto mt-8">
+            <CopyableInfo label="API URL" value={apiBaseUrl} />
+          </div>
+        )}
+        <div className="text-center mt-4 text-sm text-gray-500">
           <p>Stoïk Technical Test – JS FullStack Engineer</p>
         </div>
       </div>

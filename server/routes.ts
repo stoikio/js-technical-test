@@ -4,6 +4,7 @@ import {
   createShortUrl,
   getFullUrl,
   getAllUrls,
+  incrementClickCount,
 } from "./database/urlRepository";
 
 const router = Router();
@@ -13,6 +14,7 @@ router.get("/api/health", (req, res) => {
   res.json({
     status: "ok",
     timestamp: new Date().toISOString(),
+    baseUrl: getBaseUrl(req),
   });
 });
 
@@ -52,7 +54,7 @@ router.post("/api/shorten", async (req, res) => {
   }
 });
 
-// GET /:shortCode - Redirect to original URL
+// GET /:shortCode - Redirect to original URL (and count click)
 router.get("/:shortCode", async (req, res) => {
   try {
     const { shortCode } = req.params;
@@ -63,6 +65,9 @@ router.get("/:shortCode", async (req, res) => {
     if (!fullUrl) {
       return res.status(404).json({ error: "Short URL not found" });
     }
+
+    // Increment click counter (fire and forget)
+    incrementClickCount(shortCode).catch(() => {});
 
     // Redirect to original URL
     res.redirect(302, fullUrl);

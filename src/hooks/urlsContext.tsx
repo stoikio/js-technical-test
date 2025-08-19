@@ -1,0 +1,69 @@
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+import type { UrlItem, UrlListResponse } from "../types";
+
+interface UrlsContextValue {
+  urls: UrlItem[];
+  isLoading: boolean;
+  error: string;
+  refresh: () => Promise<void>;
+}
+
+const UrlsContext = createContext<UrlsContextValue | undefined>(undefined);
+
+export const UrlsProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
+  const [urls, setUrls] = useState<UrlItem[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  const fetchUrls = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      const response = await fetch("/api/urls");
+      const data: UrlListResponse = await response.json();
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch URLs");
+      }
+
+      setUrls(data.urls);
+      setError("");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "An error occurred");
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchUrls();
+  }, [fetchUrls]);
+
+  const value = useMemo<UrlsContextValue>(
+    () => ({
+      urls,
+      isLoading,
+      error,
+      refresh: fetchUrls,
+    }),
+    [urls, isLoading, error, fetchUrls]
+  );
+
+  return <UrlsContext.Provider value={value}>{children}</UrlsContext.Provider>;
+};
+
+export function useUrls(): UrlsContextValue {
+  const ctx = useContext(UrlsContext);
+  if (!ctx) {
+    throw new Error("useUrls must be used within a UrlsProvider");
+  }
+  return ctx;
+}
