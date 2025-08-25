@@ -23,6 +23,7 @@ Tiny full‑stack URL shortener used for the technical test.
   - `src/services/url.service.ts` – core logic
   - `src/repositories/url.repository.ts` – DB access
 - `client/`
+  - `routes/` - App pages
   - `components/` – UI components
   - `hooks/` – app hooks/providers
   - `utils.ts` – helpers (e.g., `getShortUrl`)
