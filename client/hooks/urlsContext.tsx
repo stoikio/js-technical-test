@@ -9,9 +9,13 @@ import {
 import type { UrlItem } from "sdk/types";
 
 interface UrlsContextValue {
+  /** List of all URLs returned by the API */
   urls: UrlItem[];
+  /** State of the loading of the URLs */
   isLoading: boolean;
+  /** Error message if the URLs failed to load */
   error: string;
+  /** Function to manually refresh the URLs */
   refresh: () => Promise<void>;
 }
 

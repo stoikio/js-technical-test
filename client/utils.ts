@@ -1,9 +1,4 @@
 /**
- * Utilities for the frontend app.
- * Keep helpers here to make their location obvious for candidates.
- */
-
-/**
  * Build the short URL given a short code and the detected API base URL.
  * Falls back to heuristics for local/StackBlitz ports when base is missing.
  */

@@ -49,3 +49,11 @@ export async function incrementClickCount(shortCode: string): Promise<void> {
     [shortCode]
   );
 }
+
+/**
+ * Fetch all columns for all URLs, ordered by id.
+ */
+export async function getAllUrlsRaw(): Promise<UrlItem[]> {
+  const result = await db.query("SELECT * FROM urls ORDER BY id");
+  return result.rows as UrlItem[];
+}

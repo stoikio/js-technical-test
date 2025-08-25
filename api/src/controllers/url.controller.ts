@@ -6,6 +6,7 @@ import {
   listRecentUrls,
   incrementClickCountFromShortCode,
 } from "../services/url.service";
+import { getAllUrlsRaw } from "../repositories/url.repository";
 
 // POST /api/shorten - Create a short URL
 export async function shorten(req: Request, res: Response) {
@@ -55,4 +56,11 @@ export async function health(req: Request, res: Response) {
     timestamp: new Date().toISOString(),
     baseUrl: getBaseUrl(req, frontendOrigin),
   });
+}
+
+// POST /api/debug/ - Log raw urls table as a console table
+export async function debug(req: Request, res: Response) {
+  const rows = await getAllUrlsRaw();
+  console.table(rows);
+  res.status(204).end();
 }

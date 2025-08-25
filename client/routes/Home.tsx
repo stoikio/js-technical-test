@@ -6,7 +6,7 @@ import { LoadingScreen } from "../components/LoadingScreen";
 import { useApiHealth } from "../hooks/useApiHealth";
 import type { ShortenResponse } from "sdk/types";
 import { UrlsProvider } from "../hooks/urlsContext";
-import { CopyableInfo } from "../components/CopyableInfo";
+import { DebugMenu } from "../components/DebugMenu";
 import { ToastProvider } from "../hooks/toastContext";
 
 export default function Home() {
@@ -55,11 +55,7 @@ export default function Home() {
             </div>
           </UrlsProvider>
 
-          {apiBaseUrl && (
-            <div className="max-w-md mx-auto mt-8">
-              <CopyableInfo label="API URL" value={apiBaseUrl} />
-            </div>
-          )}
+          <DebugMenu apiBaseUrl={apiBaseUrl} />
           <div className="text-center mt-4 text-sm text-gray-500">
             <p>Stoïk Technical Test – JS FullStack Engineer</p>
           </div>
