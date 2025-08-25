@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "api": "tsx api/index.ts",
-    "api:dev": "tsx watch api/index.ts",
+    "api:dev": "nodemon -L --watch api --ext ts,tsx --exec \"tsx api/index.ts\"",
     "client": "vite",
     "start": "concurrently \"npm:api\" \"npm:client\"",
     "dev": "concurrently \"npm:api:dev\" \"npm:client\""
@@ -27,6 +27,7 @@
     "@vitejs/plugin-react": "^4.2.0",
     "autoprefixer": "^10.4.19",
     "concurrently": "^8.2.2",
+    "nodemon": "^3.1.10",
     "postcss": "^8.4.35",
     "tailwindcss": "^3.4.4",
     "tsx": "^4.7.0",

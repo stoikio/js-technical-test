@@ -1,31 +1,56 @@
 ## Stoïk JS Technical Test – URL Shortener
 
-This is a tiny full‑stack URL shortener used for the technical test. It includes:
+Tiny full‑stack URL shortener.
 
-- A React + Vite frontend (`client/`)
-- A minimal Express API (`api/`)
-- An in‑memory PostgreSQL‑compatible database via PGlite
+### Tech
+
+- Client: React + Vite + Tailwind (`client/`)
+- API: Express (`api/`)
+- DB: PGlite (in‑memory, PostgreSQL compatible)
 
 ### Important folders
 
-- `client/` – React app
+- `sdk/`
+  - `types.ts` – shared TypeScript types (client + API)
+- `api/`
+  - `index.ts` – API entrypoint
+  - `app.ts` – Express app factory
+  - `routes.ts` – route wiring
+  - `config/index.ts` – ports and helpers
+  - `config/database.ts` – PGlite client + init
+  - `database/migration.sql` – schema for `urls`
+  - `database/seeds.sql` – initial data
+  - `src/controllers/url.controller.ts` – HTTP handlers
+  - `src/services/url.service.ts` – core logic
+  - `src/repositories/url.repository.ts` – DB access
+- `client/`
+  - `App.tsx`, `main.tsx`, `index.css`
+  - `utils.ts` – helpers (e.g., `getShortUrl`)
   - `components/` – UI components
-  - `hooks/` – client hooks and providers (`useApiHealth`, `urlsContext`, `toastContext`)
-  - `types/` – shared TypeScript types between client/api
-- `api/` – Express API
-  - `config/` – ports and helpers (`getBaseUrl`, `generateShortCode`)
-  - `database/` – PGlite setup, schema and repository functions
+  - `hooks/` – app hooks/providers
+  - `routes/UrlInfo.tsx`
 
-### API routes (api/routes.ts)
+### Shared Types (SDK)
+
+- Import shared contracts from `sdk/types` in both API and client, e.g.:
+
+```ts
+import type { UrlRow, ShortenRequest, ShortenResponse } from "sdk/types";
+```
+
+### API Endpoints
 
 - `GET /api/health` – health check. Accepts `frontendOrigin` query to compute base URL.
 - `POST /api/shorten` – create a short URL. Body: `{ url: string, frontendOrigin?: string }`
 - `GET /api/urls` – list recent URLs. Query: `?limit=10`
 - `GET /:shortCode` – redirects to the original URL and increments click counter.
 
-### Repository helpers (api/database/urlRepository.ts)
+### Run the app
 
-- `createShortUrl(shortCode, fullUrl)` – insert a record
-- `getFullUrl(shortCode)` – fetch original URL
-- `getAllUrls(limit)` – list URLs with `click_count`
-- `incrementClickCount(shortCode)` – bump click counter
+- Run the `npm run dev` command to start both the API and the client.
+
+### Notes for Candidates
+
+- Code is split by responsibility (controllers/services/repositories) to clarify where to add logic.
+- Keep types in `sdk/` to avoid drift between client and server.
+- Database schema and seed are plain SQL for readability.
