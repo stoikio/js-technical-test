@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "api": "node api/index.ts",
-    "api:dev": "nodemon --legacy-watch --watch api --ext ts,js,json --exec \"tsx api/index.ts\"",
+    "api:dev": "nodemon --legacy-watch --watch api --ext ts,js,json --quiet",
     "client": "vite",
     "start": "concurrently \"npm:api\" \"npm:client\"",
     "dev": "concurrently \"npm:api:dev\" \"npm:client\""
