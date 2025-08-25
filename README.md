@@ -49,6 +49,7 @@ import type { UrlRow, ShortenRequest, ShortenResponse } from "sdk/types";
 
 ### Notes for Candidates
 
+- You can use the Debug menu in the lower right corner of the homepage to dump the database content or copy the API url.
 - Code is split by responsibility (controllers/services/repositories) to clarify where to add logic.
 - Keep types in `sdk/` to avoid drift between client and server.
 - Database schema and seed are plain SQL for readability.
