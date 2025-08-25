@@ -1,0 +1,13 @@
+{
+  "watch": ["api"],
+  "ext": "ts,js,json",
+  "ignore": ["node_modules", "dist"],
+  "exec": "tsx api/index.ts",
+  "legacyWatch": true,
+  "env": {
+    "STACKBLITZ_ENV": "true",
+    "NODE_ENV": "development"
+  }
+}
+
+
