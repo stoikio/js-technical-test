@@ -2,7 +2,7 @@
   "watch": ["api"],
   "ext": "ts,js,json",
   "ignore": ["node_modules", "dist"],
-  "exec": "tsx api/index.ts",
+  "exec": "node --no-warnings --enable-source-maps --loader tsx api/index.ts",
   "legacyWatch": true,
   "env": {
     "STACKBLITZ_ENV": "true",
