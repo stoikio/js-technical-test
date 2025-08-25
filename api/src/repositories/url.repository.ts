@@ -1,5 +1,5 @@
-import { db } from "./connection";
-import type { UrlRow } from "./types";
+import { db } from "../../config/database";
+import type { UrlItem } from "sdk/types";
 
 /**
  * Create a new short URL record in the database
@@ -7,12 +7,12 @@ import type { UrlRow } from "./types";
 export async function createShortUrl(
   shortCode: string,
   fullUrl: string
-): Promise<UrlRow> {
+): Promise<UrlItem> {
   const result = await db.query(
     "INSERT INTO urls (short_code, full_url) VALUES ($1, $2) RETURNING *",
     [shortCode, fullUrl]
   );
-  return result.rows[0] as UrlRow;
+  return result.rows[0] as UrlItem;
 }
 
 /**
@@ -25,19 +25,19 @@ export async function getFullUrl(
     "SELECT full_url FROM urls WHERE short_code = $1",
     [shortCode]
   );
-  const row = result.rows[0] as Pick<UrlRow, "full_url"> | undefined;
+  const row = result.rows[0] as Pick<UrlItem, "full_url"> | undefined;
   return row?.full_url;
 }
 
 /**
  * Get all URLs ordered by creation date (most recent first)
  */
-export async function getAllUrls(limit: number = 10): Promise<UrlRow[]> {
+export async function getAllUrls(limit: number = 10): Promise<UrlItem[]> {
   const result = await db.query(
     "SELECT id, short_code, full_url, created_at FROM urls ORDER BY created_at DESC LIMIT $1",
     [limit]
   );
-  return result.rows as UrlRow[];
+  return result.rows as UrlItem[];
 }
 
 /**

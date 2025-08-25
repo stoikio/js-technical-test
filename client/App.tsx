@@ -4,7 +4,7 @@ import { UrlResult } from "./components/UrlResult";
 import { UrlList } from "./components/UrlList";
 import { LoadingScreen } from "./components/LoadingScreen";
 import { useApiHealth } from "./hooks/useApiHealth";
-import type { ShortenResponse } from "./types";
+import type { ShortenResponse } from "sdk/types";
 import { UrlsProvider } from "./hooks/urlsContext";
 import { CopyableInfo } from "./components/CopyableInfo";
 import { ToastProvider } from "./hooks/toastContext";

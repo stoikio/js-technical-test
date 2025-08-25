@@ -6,7 +6,7 @@ import {
   useMemo,
   useState,
 } from "react";
-import type { UrlItem, UrlListResponse } from "../types";
+import type { UrlItem } from "sdk/types";
 
 interface UrlsContextValue {
   urls: UrlItem[];
@@ -28,7 +28,10 @@ export const UrlsProvider: React.FC<{ children: React.ReactNode }> = ({
     try {
       setIsLoading(true);
       const response = await fetch("/api/urls");
-      const data: UrlListResponse = await response.json();
+      const data: {
+        success: boolean;
+        urls: UrlItem[];
+      } = await response.json();
 
       if (!response.ok) {
         throw new Error("Failed to fetch URLs");

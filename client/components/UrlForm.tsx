@@ -1,5 +1,5 @@
-import { FC, useState } from "react";
-import type { ShortenResponse } from "../types";
+import { FC, useCallback, useState } from "react";
+import type { ShortenResponse } from "sdk/types";
 import { useUrls } from "../hooks/urlsContext";
 
 interface UrlFormProps {
@@ -12,45 +12,48 @@ export const UrlForm: FC<UrlFormProps> = ({ onUrlShortened }) => {
   const [error, setError] = useState("");
   const { refresh } = useUrls();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = useCallback(
+    async (e: React.FormEvent) => {
+      e.preventDefault();
 
-    if (!url.trim()) {
-      setError("Please enter a URL");
-      return;
-    }
-
-    setIsLoading(true);
-    setError("");
-
-    try {
-      const response = await fetch("/api/shorten", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          url: url.trim(),
-          frontendOrigin: window.location.origin,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || "Failed to shorten URL");
+      if (!url.trim()) {
+        setError("Please enter a URL");
+        return;
       }
 
-      onUrlShortened(data);
-      // Trigger list refresh through context
-      refresh();
-      setUrl(""); // Clear form on success
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred");
-    } finally {
-      setIsLoading(false);
-    }
-  };
+      setIsLoading(true);
+      setError("");
+
+      try {
+        const response = await fetch("/api/shorten", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            url: url.trim(),
+            frontendOrigin: window.location.origin,
+          }),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || "Failed to shorten URL");
+        }
+
+        onUrlShortened(data);
+        // Trigger list refresh through context
+        refresh();
+        setUrl(""); // Clear form on success
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "An error occurred");
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [url, onUrlShortened, refresh]
+  );
 
   return (
     <div className="w-full max-w-md mx-auto">

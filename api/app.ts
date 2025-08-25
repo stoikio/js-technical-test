@@ -1,6 +1,6 @@
 import express from "express";
 import routes from "./routes";
-import { initializeDatabase } from "./database/connection";
+import { initializeDatabase } from "./config/database";
 
 export async function createApp() {
   const app = express();

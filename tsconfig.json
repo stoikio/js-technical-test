@@ -9,10 +9,14 @@
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
-    "outDir": "dist"
+    "outDir": "dist",
+    "baseUrl": ".",
+    "paths": {
+      "sdk/*": ["sdk/*"]
+    }
   },
-  "include": ["server", "src"],
+  "include": ["api", "client", "sdk"],
   "ts-node": {
     "esm": true
   }
-} 
+}

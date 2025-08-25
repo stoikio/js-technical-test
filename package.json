@@ -4,18 +4,20 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "server": "tsx server/index.ts",
-    "server:dev": "tsx watch server/index.ts",
+    "api": "tsx api/index.ts",
+    "api:dev": "tsx watch api/index.ts",
     "client": "vite",
-    "start": "concurrently \"npm:server\" \"npm:client\"",
-    "dev": "concurrently \"npm:server:dev\" \"npm:client\""
+    "start": "concurrently \"npm:api\" \"npm:client\"",
+    "dev": "concurrently \"npm:api:dev\" \"npm:client\""
   },
   "dependencies": {
     "@electric-sql/pglite": "^0.3.3",
     "express": "^4.19.2",
+    "lucide-react": "^0.541.0",
     "nanoid": "^5.0.4",
     "react": "^18.3.0",
-    "react-dom": "^18.3.0"
+    "react-dom": "^18.3.0",
+    "react-router-dom": "6.30.1"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",
@@ -31,4 +33,4 @@
     "typescript": "^5.4.3",
     "vite": "^5.2.8"
   }
-} 
+}

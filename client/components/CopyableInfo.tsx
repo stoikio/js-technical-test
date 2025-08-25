@@ -1,5 +1,6 @@
-import { FC, useState } from "react";
+import { FC, useCallback } from "react";
 import { useToast } from "../hooks/toastContext";
+import { copyToClipboard } from "../utils";
 
 interface CopyableInfoProps {
   label: string;
@@ -7,19 +8,13 @@ interface CopyableInfoProps {
 }
 
 export const CopyableInfo: FC<CopyableInfoProps> = ({ label, value }) => {
-  const [copied, setCopied] = useState(false);
   const { showToast } = useToast();
 
-  const handleCopy = async () => {
-    try {
-      await navigator.clipboard.writeText(value);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1500);
+  const handleCopy = useCallback(() => {
+    copyToClipboard(value, () => {
       showToast(`${label} copied to clipboard`);
-    } catch (err) {
-      console.error(err);
-    }
-  };
+    });
+  }, [value, label, showToast]);
 
   return (
     <div className="w-full">
@@ -35,7 +30,7 @@ export const CopyableInfo: FC<CopyableInfoProps> = ({ label, value }) => {
           className="px-3 py-2 text-sm bg-blue-600 text-white hover:bg-blue-700 transition-colors"
           aria-label="Copy"
         >
-          {copied ? "Copied" : "Copy"}
+          Copy
         </button>
       </div>
     </div>

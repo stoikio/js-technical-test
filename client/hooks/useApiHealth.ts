@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import type { HealthCheckResponse } from "../types";
 
 export const useApiHealth = () => {
   const [isApiReady, setIsApiReady] = useState(false);
@@ -14,7 +13,11 @@ export const useApiHealth = () => {
         )}`
       );
       if (response.ok) {
-        const data: HealthCheckResponse = await response.json();
+        const data: {
+          status: string;
+          timestamp: string;
+          baseUrl?: string;
+        } = await response.json();
         if (data.status === "ok") {
           setIsApiReady(true);
           if ((data as any).baseUrl) {
