@@ -1,6 +1,6 @@
 {
   "installDependencies": true,
-  "startCommand": "npm start",
+  "startCommand": "npm run dev",
   "env": {
     "STACKBLITZ_ENV": "true",
     "NODE_ENV": "development"
