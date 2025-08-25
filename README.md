@@ -16,19 +16,15 @@ Tiny full‑stack URL shortener.
   - `index.ts` – API entrypoint
   - `app.ts` – Express app factory
   - `routes.ts` – route wiring
-  - `config/index.ts` – ports and helpers
-  - `config/database.ts` – PGlite client + init
-  - `database/migration.sql` – schema for `urls`
+  - `database/migration.sql` – schema for the database
   - `database/seeds.sql` – initial data
   - `src/controllers/url.controller.ts` – HTTP handlers
   - `src/services/url.service.ts` – core logic
   - `src/repositories/url.repository.ts` – DB access
 - `client/`
-  - `App.tsx`, `main.tsx`, `index.css`
   - `utils.ts` – helpers (e.g., `getShortUrl`)
   - `components/` – UI components
   - `hooks/` – app hooks/providers
-  - `routes/UrlInfo.tsx`
 
 ### Shared Types (SDK)
 

@@ -1,0 +1,9 @@
+{
+  "watch": ["api", "sdk"],
+  "ext": "ts,tsx,js,json",
+  "exec": "tsx api/index.ts",
+  "legacyWatch": true,
+  "ignore": ["**/*.test.ts", "node_modules"]
+}
+
+
