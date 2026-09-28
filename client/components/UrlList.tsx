@@ -3,7 +3,7 @@ import { useUrls } from "../hooks/urlsContext";
 import { useApiHealth } from "../hooks/useApiHealth";
 import { copyToClipboard, getShortUrl } from "../utils";
 import { Copy, ExternalLink, Info } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { useToast } from "../hooks/toastContext";
 import type { UrlItem } from "sdk/types";
 
